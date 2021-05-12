@@ -1,0 +1,40 @@
+#!/bin/bash
+
+
+while true
+do
+   clear >$(tty)
+   if [[ ! $(ls $dbs_dir 2> /dev/null) ]]; then echo No Databases exist; sleep 1.5; break; fi
+   read -p "Name of Database to be Deleted ?  " name
+   # Check if Database name exists
+   if [ -d $dbs_dir/"$name" ]; then
+      
+      # Check if Database contains information and confirm delete
+      if [ $(ls $dbs_dir/"$name") ]; then
+	 while true
+	 do
+	    clear >$(tty)
+	    read -p "The database $name contains Tables, you sure you want to delete(yes/no)?  " answer
+	    if [[ $answer =~ [yes|YES|y|Y] ]]; then
+	       rm -r $dbs_dir/"$name"
+	       break 2
+	    fi
+	       break 2
+	 done
+
+      # Delete database right away if empty
+      else
+         rm -r $dbs_dir/"$name"	
+	 echo $name has been deleted
+	 sleep 1.5
+	 break
+      fi
+
+   # If dabasebase name doesn't exist
+   else
+      echo This name doesn\'t exist!
+      sleep 1.5
+   fi
+
+
+done

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [[ $(ls $1) ]]; then
+  while true
+  clear
+  do
+  select opt in $(ls $1) "Back"
+  do
+     if [[ $opt = "Back" ]]; then break 2; fi
+     if [ $(wc -l $1/$opt 2> /dev/null | cut -f 1 -d " ") -ne 1 ] && [[ $opt != "" ]]; then
+        echo "$opt :"
+	echo "$(awk '{ for(i=1; i<=NF; i++) {if($i!="-" && $i!="str" && $i!="int" ) printf "%s\t", $i } print " " }' $1/$opt)" | column -t | boxes
+	read
+	break 2
+     elif [[ $opt == "" ]]; then
+	echo Enter a number from the list :D
+        sleep 1.5
+        break
+     else
+	echo The Table contains no information!
+	sleep 1.5
+	break 
+     fi 
+  done
+  done
+else
+  echo No Tables Exist!
+  sleep 1.5
+fi

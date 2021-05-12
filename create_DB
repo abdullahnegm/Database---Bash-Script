@@ -1,0 +1,21 @@
+#!/bin/bash
+
+while true
+do
+   clear >$(tty)
+   read -p "Please Enter Database Name: (Characters only)  " name
+
+   # Check Name of Database contains only letters
+   if [[ $name =~ ^[a-z|A-Z]+$ ]]; then
+      if [ ! -d $dbs_dir/"$name" ]; then
+   	 mkdir -p $dbs_dir/"$name"
+	 echo $name has been created
+	 sleep 1.5
+         break
+      else
+	 clear >$(tty)
+         echo This Database name exists
+	 sleep 1.5
+      fi
+   fi
+done

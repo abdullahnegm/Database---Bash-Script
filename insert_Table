@@ -1,0 +1,52 @@
+#!/bin/bash
+
+
+while true
+do
+  if [[ $(ls $1) ]]; then
+     echo 'T A B L E S'
+     select opt in $(ls $1)
+     do
+	clear >$(tty)
+        num=$(head -n 1 $1/$opt | wc -w)
+	typeset -i i=2
+        typeset -i id
+	id=$(tail -n 1 $1/$opt | cut -d " " -f 1)
+        id+=1
+	table=($id)
+	while (($num >= i))
+	do
+	   col_name="$(head -n 1 $1/$opt | cut -d ' ' -f $i)"
+	   i=$i+1
+	   col_type="$(head -n 1 $1/$opt | cut -d ' ' -f $i)"
+	   if [[ $col_type == "str" ]];then
+	      while true
+	      do
+		 read -p "Enter the value of column $col_name:($col_type value)  " answer
+	         if [[ $answer =~ ^[a-z|A-Z]+$ ]]; then
+		    table+=($answer)
+		    break
+		 fi
+	      done
+	   elif [[ $col_type == "int" ]]; then
+	      while true
+              do
+		 read -p "Enter the value of column $col_name:($col_type value)  " answer
+		 if [[ $answer =~ ^[0-9]+$ ]]; then
+		    table+=($answer)
+		    break
+		 fi
+	      done
+	   fi
+	   table+=(-)
+	   i=$i+1
+	done
+	echo ${table[@]} >> $1/$opt
+	break 3
+     done
+  else
+     echo No tables Exist
+     sleep 1.5
+     break 2
+  fi
+done

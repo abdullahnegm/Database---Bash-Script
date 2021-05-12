@@ -1,0 +1,72 @@
+#!/bin/bash
+
+while true
+do
+  clear
+  read -p "Please Enter Table Name: (Characters only)  " name
+
+  # Check name of Table contains only letters
+  if [[ $name =~ ^[a-z|A-Z]+$ ]]; then
+     if [ ! -f $1/"$name" ]; then
+	while true
+	do
+	clear
+
+	read -p "How many columns do you want to add? (9 columns max)  " cols
+	   # Check Number of columns
+	   if [[ $cols =~ ^[1-9]$ ]]; then
+              touch $1/"$name"
+		
+	      # Structuring Table
+	      typeset -i counter
+	      counter=0
+	      arr=("id")
+	      while (( $cols*2 > $counter ))
+	      do
+
+		 # Check Name Contains only letters
+		 while true
+		 do	
+		    clear			 
+		    read -p "Enter column name:  " col_name
+		    if [[ $col_name =~ ^[a-z|A-Z]*$ ]]; then
+		       arr+=($col_name)
+		       break
+		    else
+		       echo  Enter Only Leters!!
+		       sleep 1.5
+		    fi
+		 done
+
+		 #Check type of column	
+		 while true
+		 do
+		    clear
+		    read -p "Type of col (str/int)?  " col_type
+		    if [[ $col_type =~ [str|int] ]]; then
+		       arr+=($col_type)
+		       break
+		    else
+		       echo Enter \(int or str\)!
+		       sleep 1.5
+		    fi
+		 done			 
+		 counter=$counter+2
+	      done
+
+	      # Add column names to table file
+			      echo ${arr[@]} >> $1/$name
+	      break			    
+	   else
+	      echo Enter a Number!
+	      sleep 1.5
+	   fi
+	done
+	break
+     else
+	clear
+	tput setaf 2; echo This Table name exists
+     fi
+  fi
+
+done

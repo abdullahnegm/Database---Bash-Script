@@ -1,0 +1,86 @@
+#!/bin/bash
+
+table_menu=("Create Table" "Insert Table" "Display Tables" "Select row" "Delete row" "Delete Table" "Back")
+database_menu=("Create Database" "Open Database" "Delete Database" "Exit")
+dbs_dir="databases"
+
+
+main_table () {
+
+   while true
+   do
+      clear >$(tty)
+      select opt in "${table_menu[@]}"
+      do
+	 case $REPLY in
+
+	    1) . ./create_Table
+	       break
+               ;;
+       
+            # Insert into table
+	    2) . ./insert_Table
+	       ;;
+
+	    # Display Tables content
+	    3) . ./display_Table
+	       break 
+	       ;;
+
+	    4) . ./Ins_Del $1 "select"
+	       ;; 
+
+            # Delete Row from table
+            5) . ./Ins_Del $1 "delete"
+               ;;
+
+	    # Delete Table
+	    6) . ./DelTable
+               break
+	       ;;
+	    7) main_db
+	       ;;
+	 esac
+      done
+   done
+}
+
+
+
+
+
+main_db () {
+
+   while true
+   do
+      clear >$(tty)
+      select opt in "${database_menu[@]}"
+      do
+          case $REPLY in
+
+	     # Create Database
+             1) . ./create_DB
+
+                break
+                ;;
+
+	        # Check if Databases exist before displaying
+	     2) . ./display_DB
+		break
+		;;
+	
+	     # Delete Database
+             3) . ./del_DB
+		break
+                ;;
+
+             4) exit
+		;;
+
+          esac
+
+      done
+   done
+}
+
+main_db

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+while true
+do
+  clear >$(tty)
+  # Check if Database is empty
+  if [[ $(ls $1) ]]; then
+     tput setaf 6;
+     read -p "Name of Table to be Deleted ?  " name
+
+     # Check if Table name exists
+     if [ -f $1/"$name" ]; then
+        rm $1/"$name"
+	echo $name has been deleted!
+	sleep 1.5
+        break
+
+     # If Table name Doesn't exist
+     else
+        echo This name Doesn\'t exist!
+	sleep 1.5
+     fi
+  else
+     echo Database is empty !
+     sleep 1.5
+     break
+  fi
+done

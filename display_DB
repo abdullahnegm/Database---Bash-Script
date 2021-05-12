@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+if [[ $(ls $dbs_dir 2> null) ]]; then
+		   
+   select opt in $(ls $dbs_dir)
+   do
+      main_table $dbs_dir/$opt
+      
+   done
+else
+   echo No Databases exist to show!
+   sleep 1.5
+fi

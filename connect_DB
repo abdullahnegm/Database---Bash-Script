@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+clear >$(tty)
+if [[ $(ls $dbs_dir 2> /dev/null) ]]; then
+		   
+   select opt in $(ls $dbs_dir) "Back"
+   do
+      if [[ $opt == "Back" ]]; then main_db; fi
+      if [[ -d $dbs_dir/$opt ]] && [[ $opt != "" ]]; then
+         main_table $dbs_dir/$opt $opt
+      else
+         echo "Enter a correct Number please"
+      fi
+      
+   done
+else
+   echo No Databases exist to show!
+   sleep 1.5
+fi

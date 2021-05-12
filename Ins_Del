@@ -1,0 +1,45 @@
+#!/bin/bash
+
+
+if [[ $(ls $1) ]]; then
+  while true
+    clear >$(tty)
+    do
+        select opt in $( ls $1 ) "Back"
+        do
+        if [[ $opt == "Back" ]];  then break 3; fi
+        if [[ "$( wc -l $1/$opt 2> /dev/null | tail -n 1 | cut -d ' ' -f 1 )" == "1" ]] && [[ $opt != "" ]]; then
+           echo Table is empty
+           sleep 1.5
+           break
+        elif [[ $opt == "" ]]; then
+           echo Enter a number from the list :D
+           sleep 1.5
+           break
+        else
+        while true
+        do
+        clear
+        read -p "Enter id Number:  " number
+        if  [[ "$(cut -d " " -f 1 $1/$opt | grep -w $number 2> /dev/null)" ]]; then
+            if [ $2 == "delete" ]; then
+               NR="$(awk -v number="$number" '{ if($1==number){ print NR } }' $1/$opt)"
+               $(sed -i "$NR d" $1/$opt)
+            elif [ $2 == "select" ]; then
+               echo "$(awk -v number="$number" '{if($1=="id" || $1==number) for(i=1; i<=NF; i++) {if($i!="-" && $i!="str" && $i!="int" ) printf "%s\t", $i } print " " }' $1/$opt)" | column -t 
+            fi
+            read
+            break 3
+        else
+            echo "Id doesn't exist"
+            sleep 1.5
+        fi
+        done
+        fi
+        done
+    done
+else
+    echo No Tables Exist
+    sleep 1.5
+fi
+
